@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { usePrivy } from "@privy-io/react-auth";
 import Cookies from "js-cookie";
 
 function App() {
-  const { ready, authenticated, user, login, logout, linkEmail, linkWallet, unlinkWallet, unlinkEmail, linkGoogle, unlinkGoogle, linkApple, unlinkApple, linkTwitter, unlinkTwitter, linkPhone, unlinkPhone} = usePrivy(); // Add linkEmail from usePrivy hook
+  const { ready, authenticated, user, login, logout, linkEmail, linkWallet, unlinkWallet, unlinkEmail, linkGoogle, unlinkGoogle, linkApple, unlinkApple, linkTwitter, unlinkTwitter, linkPhone, unlinkPhone} = usePrivy();
   const [showDropdown, setShowDropdown] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
-  // Wait until the Privy client is ready before taking any actions
+  const loginButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (ready && !authenticated && loginButtonRef.current) {
+      loginButtonRef.current.click();
+    }
+  }, [ready, authenticated]);
+
   useEffect(() => {
     if (ready) {
       if (authenticated) {
@@ -17,10 +24,6 @@ function App() {
       }
     }
   }, [ready, authenticated, user]);
-
-  if (!ready) {
-    return null;
-  }
 
   const handleLogout = () => {
     logout();
@@ -215,8 +218,8 @@ function App() {
                     {user.phone ? "Remove" : "Add"}
                   </button>
                 </div>
-                <div class="cred-div logout-button-privy">
-                  <div class="privy-dropdown-text" onClick={handleLogout}>
+                <div class="cred-div logout-button-privy" onClick={handleLogout}>
+                  <div class="privy-dropdown-text" >
                     Logout
                   </div>
                 </div>
@@ -225,7 +228,7 @@ function App() {
           )}
         </div>
       ) : (
-        <button className="privy-login-button" onClick={login}>
+        <button ref={loginButtonRef} className="privy-login-button" onClick={login}>
           Log In
         </button>
       )}
