@@ -115,7 +115,7 @@ function App() {
             <div className="dropdown-content">
               <div className="privy-dropdown">
                 <h5 className="account-text">Account</h5>
-                <div className="createdat-text">created: {user && user.createdAt && user.createdAt.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                <div className="createdat-text">Created: {user && user.createdAt && user.createdAt.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' })}</div>
                 <div className="cred-div">
                   <div className="privy-dropdown-text">
                     Wallet: {user.wallet ? `${user.wallet.address.substring(0, 4)}...${user.wallet.address.slice(-5)}` : "None"}
